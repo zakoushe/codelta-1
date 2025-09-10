@@ -242,7 +242,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
         <Typography
           variant="body2"
-          sx={{ color: "text.secondary", lineHeight: 1.6,  }}
+          sx={{ color: "text.secondary", lineHeight: 1.6, }}
         >
           {project.description}
         </Typography>
@@ -284,9 +284,14 @@ const App: React.FC = () => {
       title: "Clinic Management Systems",
       description: "Designing robust and user-friendly clinic management systems that streamline administrative workflows, patient records, and appointment scheduling. Our solutions enhance efficiency and allow healthcare providers to focus on delivering exceptional patient care."
     },
+    // {
+    //   title: "QR Digital Menu",
+    //   description: "Transform the dining experience with a modern, contactless QR menu solution. Easily update your menu in real-time, provide detailed dish information, and streamline ordering for both staff and customers, enhancing convenience and operational efficiency."
+    // },
     {
-      title: "QR Digital Menu",
-      description: "Transform the dining experience with a modern, contactless QR menu solution. Easily update your menu in real-time, provide detailed dish information, and streamline ordering for both staff and customers, enhancing convenience and operational efficiency."
+      title: "QR Digital Menu & Ordering",
+      description:
+        "Revolutionize the dining experience with a contactless QR menu solution. Customers scan a QR code at their table to access the full menu, view detailed dish information, and place orders directly from their device. Easily update your menu in real-time and streamline operations for both staff and diners, enhancing convenience, speed, and customer satisfaction.",
     },
     {
       title: "SEO & Digital Marketing",
@@ -672,7 +677,7 @@ const App: React.FC = () => {
                 <TitleWithDivider> Projects</TitleWithDivider>
                 <Grid container spacing={4} justifyContent="center">
                   {projects.map((project, index) => (
-                    <Grid  key={index}>
+                    <Grid key={index}>
                       <ProjectCard project={project} />
                     </Grid>
                   ))}
