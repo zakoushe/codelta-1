@@ -1,11 +1,12 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Box, Link, Container, Grid, Paper, CssBaseline, ThemeProvider, createTheme, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Link, Container, Grid, Paper, Avatar, CssBaseline, ThemeProvider, createTheme, IconButton } from '@mui/material';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { styled } from '@mui/material/styles';
 import logo from './assets/logo.jpeg';
 import client1 from './assets/jabal1.png';
@@ -13,7 +14,9 @@ import client11 from './assets/jabal2.png';
 import client2 from './assets/lebtar1.png';
 import client21 from './assets/lebtar2.png';
 import client22 from './assets/lebtar3.png';
-
+import InstagramIcon from '@mui/icons-material/Instagram';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import client3 from './assets/bob1.png';
 import client4 from './assets/rent1.png';
 import client41 from './assets/rent2.png';
@@ -21,12 +24,24 @@ import client5 from './assets/gofast1.png';
 import client51 from './assets/gofast2.png';
 import client52 from './assets/gofast3.png';
 import client53 from './assets/gofast4.png';
-
+import { motion } from 'framer-motion'
+import StarIcon from '@mui/icons-material/Star';
 
 interface TitleWithDividerProps {
   children: React.ReactNode;
 }
-
+const AnimatedSection: React.FC<{ children: React.ReactNode, delay?: number }> = ({ children, delay = 0 }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay }}
+      viewport={{ once: false, amount: 0.2 }} // triggers each time section enters viewport
+    >
+      {children}
+    </motion.div>
+  );
+};
 const TitleWithDivider: React.FC<TitleWithDividerProps> = ({ children }) => {
   return (
     <Box textAlign="center" mb={4} paddingBottom={'2rem'}>
@@ -59,8 +74,33 @@ const TitleWithDivider: React.FC<TitleWithDividerProps> = ({ children }) => {
   );
 };
 
+const reviews = [
+  {
+    name: "Mohn Doe",
+    avatar: "/avatars/john.jpg", // replace with your images
+    rating: 5,
+    text: "Excellent service! Highly recommended for anyone looking for quality and professionalism."
+  },
+  {
+    name: "Zane Smith",
+    avatar: "/avatars/jane.jpg",
+    rating: 4,
+    text: "Very satisfied with the experience. The team was helpful and attentive."
+  },
+  {
+    name: "Ali Hassan",
+    avatar: "/avatars/ali.jpg",
+    rating: 5,
+    text: "Amazing support and great results! Will definitely use again."
+  },
+  {
+    name: "Hli Hassan",
+    avatar: "/avatars/ali.jpg",
+    rating: 5,
+    text: "The website’s design is absolutely stunning! The UI/UX is intuitive, modern, and a pleasure to navigate."
+  }
+];
 
-// Function to create theme based on mode
 const getTheme = (mode: 'light' | 'dark') =>
   createTheme({
     palette: {
@@ -84,7 +124,6 @@ const getTheme = (mode: 'light' | 'dark') =>
     },
   });
 
-// Hero Section
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
   display: 'flex',
@@ -92,7 +131,6 @@ const HeroSection = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'center',
-  // padding: theme.spacing(4),
   overflow: 'hidden',
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
@@ -109,7 +147,6 @@ const HeroSection = styled(Box)(({ theme }) => ({
 
 const LogoImage = styled('img')({
   width: '100%',
-  
   maxWidth: '100%',
   maxHeight: '80vh',
   height: 'auto',
@@ -128,97 +165,151 @@ interface ProjectCardProps {
   };
 }
 
+
+interface ProjectCardProps {
+  project: {
+    title: string;
+    description: string;
+    images: string[];
+    url: string;
+  };
+}
+
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleNext = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % project.images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % project.images.length);
+  };
+  const handlePrevious = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
   };
 
-  const handlePrevious = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + project.images.length) % project.images.length);
-  };
+
+  useEffect(() => {
+    if (project.images.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % project.images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [project.images.length]);
 
   return (
     <Paper
       sx={{
         borderRadius: 3,
-        overflow: 'hidden',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-        transition: 'transform 0.3s, box-shadow 0.3s',
-        '&:hover': {
-          transform: 'translateY(-5px)',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+        overflow: "hidden",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+        transition: "transform 0.3s, box-shadow 0.3s",
+        "&:hover": {
+          transform: "translateY(-5px)",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
         },
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        textAlign: "center",
+        width: { xs: "90%", sm: 350, md: 500 },
+        maxWidth: "100%",
+        margin: "0 auto",
       }}
     >
-      <Box sx={{ position: 'relative', overflow: 'hidden', height: '450px' }}>
-        <img
-          src={project.images[currentImageIndex]}
-          alt={project.title}
+      <Typography
+        variant="h6"
+        component="h3"
+        sx={{ fontWeight: "bold", marginTop: "15px", textAlign: "center" }}
+      >
+        {project.title}
+      </Typography>
+      {/* Image wrapper */}
+      <Box
+        sx={{
+          width: "100%",
+          height: 220,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "background.paper",
+          p: 2,
+          position: "relative",
+        }}
+      >
+        {project.images.map((img, idx) => (
+          <img
+            key={idx}
+            src={img}
+            alt={project.title}
+            style={{
+              maxWidth: "80%",
+              maxHeight: "100%",
+              objectFit: "contain",
+              marginTop: "10px",
+              borderRadius: "20px",
+              position: "absolute",
+              opacity: idx === currentImageIndex ? 1 : 0,
+              transition: "opacity 0.6s ease-in-out",
+              boxShadow: "0 8px 20px rgba(0, 114, 255, 0.4)",
+            }}
+          />
+        ))}
 
-          style={{ width: '100%', height: '100%' }}
-        />
         {project.images.length > 1 && (
           <>
-            <IconButton
-              onClick={handlePrevious}
+
+
+            {/* Dots */}
+            {/* <Box
               sx={{
-                position: 'absolute',
-                top: '50%',
-                left: 8,
-                transform: 'translateY(-50%)',
-                color: 'white',
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                '&:hover': { backgroundColor: 'rgba(0,0,0,0.7)' },
+                position: "absolute",
+                bottom: "-10px",
+               
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                gap: 1,
               }}
             >
-              <ArrowBackIosIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              onClick={handleNext}
-              sx={{
-                position: 'absolute',
-                top: '50%',
-                right: 8,
-                transform: 'translateY(-50%)',
-                color: 'white',
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                '&:hover': { backgroundColor: 'rgba(0,0,0,0.7)' },
-              }}
-            >
-              <ArrowForwardIosIcon fontSize="small" />
-            </IconButton>
+              {project.images.map((_, idx) => (
+                <Box
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    bgcolor:
+                      idx === currentImageIndex
+                        ? "#00c6ff"
+                        : "rgba(255,255,255,0.6)",
+                    cursor: "pointer",
+                  }}
+                />
+              ))}
+            </Box> */}
           </>
         )}
       </Box>
-      <Box sx={{ p: 3, flexGrow: 1, backgroundColor: 'background.paper' }}>
+
+      {/* Content */}
+      <Box sx={{ p: 3, backgroundColor: "background.paper", flexGrow: 1 }}>
+
         <Typography
-          variant="h5"
-          component="h3"
-          mb={1}
-          sx={{ color: '#00c6ff', fontWeight: 'bold' }}
+          variant="body2"
+          sx={{ color: "text.secondary", lineHeight: 1.6, textAlign: "left" }}
         >
-          {project.title}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
           {project.description}
         </Typography>
-        <Link href={project.url} target="_blank" rel="noopener noreferrer" sx={{ textDecoration: 'none', color: '#0072ff', '&:hover': { textDecoration: 'underline' } }}>
-          Visit Website
-        </Link>
       </Box>
     </Paper>
   );
 };
 
+
 const App: React.FC = () => {
-  // 🌙☀️ Theme Mode State
+
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
 
-  // Load saved preference
+
   useEffect(() => {
     const savedMode = localStorage.getItem('themeMode') as 'light' | 'dark' | null;
     if (savedMode) {
@@ -226,7 +317,7 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Save preference on change
+
   useEffect(() => {
     localStorage.setItem('themeMode', mode);
   }, [mode]);
@@ -264,8 +355,8 @@ const App: React.FC = () => {
 
   const projects = [
     {
-      title: "Jabal Amel nursery",
-      description: "Developed a modern and intuitive website for Jabal Amel nursery, featuring an elegant design and an easy-to-navigate interface to showcase their services and connect with parents.",
+      title: "Jabal Amel Nursery",
+      description: "Developed a modern and intuitive website for Jabal Amel Nursery, a plants and flower nursery. Focused on perfect UI/UX design with a visually appealing layout, making it easy for visitors to explore plants, services, and promotions. Optimized the website for smooth navigation and mobile responsiveness, providing an engaging experience for parents and plant enthusiasts.",
       images: [
         client1,
         client11
@@ -274,7 +365,7 @@ const App: React.FC = () => {
     },
     {
       title: "Lebtar",
-      description: "Built a comprehensive web platform for Lebtar, a leading digital solutions provider. The site highlights their expertise in various tech domains and serves as a hub for client engagement.",
+      description: "Built a comprehensive web platform for Lebtar, a company specializing in ceramic products and toilets. Emphasized SEO best practices to improve search visibility when sharing products online, ensuring better reach to potential customers. Designed a user-friendly interface that showcases their product catalog clearly, boosting user engagement and client conversions.",
       images: [
         client2,
         client21,
@@ -283,8 +374,8 @@ const App: React.FC = () => {
       url: "https://www.lebtar.com"
     },
     {
-      title: "Bob’s construction",
-      description: "Designed a portfolio website for Bob’s Construction, showcasing their past projects with a clean, professional layout. The site is optimized for performance and mobile viewing to attract new clients.",
+      title: "Bob’s Construction",
+      description: "Created a professional portfolio website for Bob’s Construction, highlighting past projects with an elegant, clean design. Ensured mobile optimization and fast performance for visitors. Incorporated visual storytelling to make project showcases more engaging and to help attract new clients.",
       images: [
         client3
       ],
@@ -292,26 +383,25 @@ const App: React.FC = () => {
     },
     {
       title: "Rent A Car",
-      description: "Designed a portfolio website for Bob’s Construction, showcasing their past projects with a clean, professional layout. The site is optimized for performance and mobile viewing to attract new clients.",
+      description: "Developed a responsive website for Rent A Car, focusing on ease of use for clients booking vehicles online. Implemented intuitive navigation, clear calls-to-action, and fast loading times to enhance the user experience. Optimized the website for SEO to improve visibility in local searches and attract more customers.",
       images: [
         client4,
         client41
       ],
       url: "https://www.originalrentacar.com/"
     },
-    {
-      title: "GO FAST",
-      description: "Designed a portfolio website for Bob’s Construction, showcasing their past projects with a clean, professional layout. The site is optimized for performance and mobile viewing to attract new clients.",
-      images: [
-        client53,
-        // client51,
-        // client52,
-
-      ],
-      url: "#"
-    },
-
+    // {
+    //   title: "GO FAST",
+    //   description: "Designed a modern, fast-loading website for GO FAST, emphasizing a sleek and dynamic UI/UX. Focused on creating an engaging online presence to showcase their services and attract clients. Ensured the platform is responsive and user-friendly across devices, with attention to performance and aesthetic appeal.",
+    //   images: [
+    //     client53,
+    //     // client51,
+    //     // client52,
+    //   ],
+    //   url: "#"
+    // },
   ];
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -335,9 +425,31 @@ const App: React.FC = () => {
             </Typography>
 
             {/* Toggle Button */}
-            <IconButton color="inherit" onClick={toggleMode}>
-              {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
+            <Box
+              onClick={toggleMode}
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                background: mode === 'dark' ? 'linear-gradient(135deg, #1C1C1C, #333)' : 'linear-gradient(135deg, #FFD700, #FFB800)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              <motion.div
+                key={mode}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {mode === 'dark' ? <WbSunnyIcon sx={{ color: '#FFD700' , marginTop:"7px"}} /> : <DarkModeIcon sx={{ color: '#1C1C1C', marginTop:"7px" }} />}
+              </motion.div>
+            </Box>
 
             <Box sx={{ display: { xs: 'none', md: 'flex' }, '& a': { ml: 3, color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff' } } }}>
               <Link href="#about"> About Us</Link>
@@ -406,152 +518,409 @@ const App: React.FC = () => {
         <main>
           {/* Hero */}
           <HeroSection id="hero">
-            <Box sx={{ width: '100%', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' , }}>
+            <Box sx={{ width: '100%', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
               <LogoImage src={logo} alt="Codelta Logo" />
             </Box>
           </HeroSection>
+          <AnimatedSection delay={0.1}>
+            <Container id="about" sx={{ py: 12 }}>
+              <TitleWithDivider>About Us</TitleWithDivider>
+              <Typography variant="h">
+                At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
+                websites and POS systems to data solutions and custom software, we craft technology
+                that helps businesses grow and thrive. Our team blends creativity with technical
+                expertise to deliver modern, reliable, and user-friendly products for clients worldwide.
+              </Typography>
+              <Grid
+                container
+                spacing={6}
+                alignItems="center"
+                sx={{
+                  flexDirection: { xs: "column", md: "row" },
+                }}
+              >
+                {/* Text Side */}
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: { xs: 0, md: 2 }, marginTop: "2rem" }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: "bold",
+                        mb: 2,
+                        background: "linear-gradient(45deg, #00c6ff, #0072ff)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
+                    >
+                      Why choose us?
+                    </Typography>
 
-          <Container id="about" sx={{ py: 8 }}>
-            <TitleWithDivider  >
-              About Us
-            </TitleWithDivider>
-            <Grid
-              container
-              spacing={6}
-              sx={{ display: "flex", alignItems: "center", flexDirection: { xs: 'column', md: 'row' }, }}
+                    <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.8, color: "text.secondary" }}>
+                      What sets us apart is our passion for innovation and attention to detail.
+                      We don’t just build software — we create experiences that connect, inspire,
+                      and transform. Our approach combines cutting-edge design with robust engineering,
+                      ensuring that every solution is both beautiful and functional.
+                    </Typography>
 
-            >
-              {/* Image Side */}
-              <Grid item xs={12} md={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Box
-                  component="img"
-                  src="https://cdn.dribbble.com/users/1162077/screenshots/3848914/programmer.gif"
-                  alt="Codelta Teamwork"
-                  sx={{
-                    width: { xs: '80%', md: '100%' },
-                    maxWidth: 500,
-                  }}
-                />
-                <Box sx={{ marginLeft: "2rem" }}>
-                  <Typography
-                    variant="body1"
-                    sx={{ lineHeight: 1.8, color: 'text.secondary', mb: 2 }}
-                  >
-                    At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
-                    websites and POS systems to data solutions and custom software, we craft technology
-                    that helps businesses grow and thrive. Our team blends creativity with technical
-                    expertise to deliver modern, reliable, and user-friendly products for clients worldwide.
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ lineHeight: 1.8, color: 'text.secondary', mb: 2 }}
-                  >
-                    What sets us apart is our passion for innovation and attention to detail.
-                    We don’t just build software — we create experiences that connect, inspire,
-                    and transform. Our approach combines cutting-edge design with robust engineering,
-                    ensuring that every solution is both beautiful and functional.
-                  </Typography>
+                    <Box component="ul" sx={{ listStyle: "none", pl: 0, mb: 3 }}>
+                      {[
+                        "Creative and modern design tailored to your brand",
+                        "User-friendly experiences that inspire and connect",
+                        "SEO services to boost visibility and rankings",
+                        "Custom solutions — from websites to POS and data systems"
+                      ].map((item, idx) => (
+                        <Typography
+                          component="li"
+                          key={idx}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            mb: 1.5,
+                            color: "text.secondary",
+                          }}
+                        >
+                          <Box
+                            component="span"
+                            sx={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              width: 22,
+                              height: 22,
+                              borderRadius: "6px",
+                              bgcolor: "primary.main",
+                              color: "#fff",
+                              fontSize: 14,
+                              mr: 1.5,
+                            }}
+                          >
+                            ✓
+                          </Box>
+                          {item}
+                        </Typography>
+                      ))}
+                    </Box>
 
-                  <Typography
-                    variant="body1"
-                    sx={{ lineHeight: 1.8, color: 'text.secondary' }}
-                  >
-                    At our core, we believe in long-term partnerships. We work closely with
-                    our clients, listening to their goals and challenges, and crafting solutions
-                    tailored to their unique vision. Together, we aim to push the boundaries
-                    of what’s possible in the digital world.
-                  </Typography>
-                </Box>
+                    <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.8, color: "text.secondary" }}>
+                      At our core, we believe in long-term partnerships. We work closely with
+                      our clients, listening to their goals and challenges, and crafting solutions
+                      tailored to their unique vision. Together, we aim to push the boundaries
+                      of what’s possible in the digital world.
+                    </Typography>
+
+                  </Box>
+                </Grid>
+
               </Grid>
+            </Container>
+          </AnimatedSection>
+          {/* Services  */}
+          <AnimatedSection>
+            <Container id="services" sx={{ position: 'relative', overflow: 'hidden' }}>
 
-            </Grid>
-          </Container>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: -50,
+                  left: -50,
+                  width: 300,
+                  height: 300,
 
-          {/* Services */}
-          <Container id="services" sx={{ py: 8 }}>
-            <Box textAlign="center">
-              <TitleWithDivider>Our Services</TitleWithDivider>
-              <Grid container spacing={4}>
-                {services.map((service, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
+                  opacity: 0.08,
+                  borderRadius: '50%',
+                  filter: 'blur(120px)',
+                  zIndex: 0,
+                }}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: -50,
+                  right: -50,
+                  width: 400,
+                  height: 400,
+
+                  opacity: 0.08,
+                  borderRadius: '50%',
+                  filter: 'blur(140px)',
+                  zIndex: 0,
+                }}
+              />
+
+              <Box textAlign="center" sx={{ position: 'relative', zIndex: 1 }}>
+                <TitleWithDivider> Services</TitleWithDivider>
+
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: 12,
+                    '@media(max-width:1024px)': { gridTemplateColumns: 'repeat(2, 1fr)', gap: 5 },
+                    '@media(max-width:600px)': { gridTemplateColumns: '1fr', gap: 5 },
+                  }}
+                >
+                  {services.map((service, index) => (
                     <Paper
+                      key={index}
                       sx={{
                         display: 'flex',
                         flexDirection: 'column',
+                        alignItems: 'center',
+                        p: 3,
                         borderRadius: 3,
-                        overflow: 'hidden',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                        transition: 'transform 0.3s, box-shadow 0.3s',
+                        background: 'linear-gradient(145deg, rgba(0,198,255,0.05), rgba(0,114,255,0.05))',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
                         '&:hover': {
-                          transform: 'translateY(-5px)',
-                          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                          transform: 'translateY(-8px) scale(1.05)',
+                          boxShadow: '0 10px 25px rgba(0,198,255,0.25)',
                         },
                       }}
                     >
-                      {/* Optional: Add image here if needed */}
-                      <Box sx={{ p: 3, backgroundColor: 'background.paper' }}>
-                        <Typography
-                          variant="h5"
-                          mb={2}
-                          sx={{ color: '#00c6ff', fontWeight: 'bold' }}
-                        >
-                          {service.title}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                          {service.description}
-                        </Typography>
+                      {/* Mini Icon Circle */}
+                      <Box
+                        sx={{
+                          width: 60,
+                          height: 60,
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          mb: 2,
+                          bgcolor: 'primary.main',
+                          color: '#fff',
+                          fontSize: 24,
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {index + 1}
                       </Box>
+
+                      <Typography
+                        variant="subtitle1"
+                        mb={1}
+                        sx={{
+                          fontWeight: 'bold',
+                          background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {service.title}
+                      </Typography>
+
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'text.secondary', textAlign: 'center', lineHeight: 1.6 }}
+                      >
+                        {service.description}
+                      </Typography>
                     </Paper>
-                  </Grid>
-                ))}
-              </Grid>
+                  ))}
+                </Box>
+              </Box>
+            </Container>
+          </AnimatedSection>
+
+          <AnimatedSection>
+            {/* Projects Section */}
+            <Container id="projects" sx={{ py: 8 }}>
+              <Box textAlign="center">
+                <TitleWithDivider> Projects</TitleWithDivider>
+                <Grid container spacing={4} justifyContent="center">
+                  {projects.map((project, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <ProjectCard project={project} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </Container>
+          </AnimatedSection>
+          {/* review section */}
+          <Container id="reviews" sx={{ py: 8 }}>
+            <Box textAlign="center" mb={6}>
+              <TitleWithDivider>
+                What Our Clients Say
+              </TitleWithDivider>
+              <Typography variant="body1" color="text.secondary">
+                Trusted by businesses and individuals worldwide
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {reviews.map((review, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: { xs: 'center', md: index % 2 === 0 ? 'flex-start' : 'flex-end' },
+                  }}
+                  component={motion.div}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <Paper
+                    sx={{
+                      width: { xs: '100%', md: '60%' },
+                      p: 2,
+                      borderRadius: 2,
+                      boxShadow: '0 4px 12px hsla(224, 86%, 80%, 0.05)',
+                      backgroundColor: 'background.paper',
+                    }}
+                  >
+                    <Box display="flex" alignItems="center" mb={2} gap={2}>
+                      <Avatar src={review.avatar} alt={review.name} />
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        {Array.from({ length: review.rating }).map((_, i) => (
+                          <StarIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />
+                        ))}
+                      </Box>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary">
+                      "{review.text}"
+                    </Typography>
+                  </Paper>
+                </Box>
+              ))}
             </Box>
           </Container>
-
-
-          {/* Clients/Projects Section */}
-          <Container id="projects" sx={{ py: 8 }}>
-            <Box textAlign="center">
-              <TitleWithDivider>Our Projects</TitleWithDivider>
-              <Grid container spacing={4} justifyContent="center">
-                {projects.map((project, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
-                    <ProjectCard project={project} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          </Container>
-
-
           {/* Contact */}
-          <Container id="contact" sx={{ py: 8 }}>
+          {/* <Container id="contact" sx={{ py: 8 }}>
             <Box textAlign="center">
               <TitleWithDivider>Get In Touch</TitleWithDivider>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <EmailIcon sx={{ color: '#00c6ff' }} />
                   <Typography variant="body1">
-                    <Link href="mailto:contact@co-delta.com" sx={{ color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff', textDecoration: 'underline' } }}>
+                    <Link
+                      href="mailto:contact@co-delta.com"
+                      sx={{
+                        color: 'text.secondary',
+                        textDecoration: 'none',
+                        '&:hover': { color: '#00c6ff', textDecoration: 'underline' },
+                      }}
+                    >
                       contact@co-delta.com
                     </Link>
                   </Typography>
                 </Box>
+
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <CallIcon sx={{ color: '#00c6ff' }} />
                   <Typography variant="body1" sx={{ color: 'text.secondary' }}>70 059 625</Typography>
                 </Box>
+
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <WhatsAppIcon sx={{ color: '#00c6ff' }} />
+                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                    <Link
+                      href="https://wa.me/96170059625"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff', textDecoration: 'underline' } }}
+                    >
+                      70 059 625
+                    </Link>
+                  </Typography>
+                </Box>
+
               </Box>
             </Box>
-          </Container>
+          </Container> */}
         </main>
+        <footer>
+          <Box sx={{
+            backgroundColor: theme.palette.background.paper, py: 2, borderTopLeftRadius: { xs: "100px", lg: "500px" },
+            borderTopRightRadius: { xs: "100px", lg: "500px" }, boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.1)",
+          }}>
+            <Container>
+              <Box textAlign="center">
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 'bold',
+                    display: 'inline-block',
+                    position: 'relative',
+                    background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  Codelta
+                </Typography>
+                <Typography variant="h6" fontSize={"15px"} marginTop={"10px"}>Connecting you with innovative solutions and seamless support.</Typography>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, justifyContent: "center", alignItems: 'center', gap: '16px', marginTop: "20px" }}>
 
+                  {/* Email */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <EmailIcon sx={{ color: '#00c6ff' }} />
+                    <Typography variant="body1">
+                      <Link
+                        href="mailto:contact@co-delta.com"
+                        sx={{
+                          color: 'text.secondary',
+                          textDecoration: 'none',
+                          '&:hover': { color: '#00c6ff', textDecoration: 'underline' },
+                        }}
+                      >
+                        contact@co-delta.com
+                      </Link>
+                    </Typography>
+                  </Box>
+
+                  {/* Phone */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CallIcon sx={{ color: '#00c6ff' }} />
+                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>70 059 625</Typography>
+                  </Box>
+
+                  {/* WhatsApp */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <WhatsAppIcon sx={{ color: '#00c6ff' }} />
+                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                      <Link
+                        href="https://wa.me/96170059625"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff', textDecoration: 'underline' } }}
+                      >
+                        70 059 625
+                      </Link>
+                    </Typography>
+                  </Box>
+
+                  {/* Instagram */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <InstagramIcon sx={{ color: '#00c6ff' }} />
+                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                      <Link
+                        href="https://instagram.com/codelta.dev"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff', textDecoration: 'underline' } }}
+                      >
+                        @codelta
+                      </Link>
+                    </Typography>
+                  </Box>
+
+                </Box>
+              </Box>
+            </Container>
+          </Box>
+        </footer>
         {/* Footer */}
-        <Box component="footer" sx={{ backgroundColor: 'background.paper', py: 3, textAlign: 'center', color: 'text.secondary' }}>
+        {/* <Box component="footer" sx={{ backgroundColor: 'background.paper', py: 3, textAlign: 'center', color: 'text.secondary' }}>
           <Typography variant="body2">&copy; {new Date().getFullYear()} Codelta. All rights reserved.</Typography>
-        </Box>
+        </Box> */}
       </Box>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 };
 
