@@ -47,6 +47,11 @@ const TitleWithDivider: React.FC<TitleWithDividerProps> = ({ children }) => {
           background: 'linear-gradient(45deg, #00c6ff, #0072ff)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
+          fontSize: {
+            xs: '1.5rem', 
+            sm: '2rem', 
+            md: '2rem',   
+          },
         }}
       >
         {children}
@@ -55,9 +60,13 @@ const TitleWithDivider: React.FC<TitleWithDividerProps> = ({ children }) => {
       <Box
         sx={{
           height: '4px',
-          width: '60%',
+          width: {
+            xs: '40%', 
+            sm: '60%', 
+            md: '60%',  
+          },
           maxWidth: 200,
-          bgcolor: '#B0B0B0',  // subtle gray instead of bright cyan
+          bgcolor: '#B0B0B0', 
           mx: 'auto',
           mt: 1,
           borderRadius: 2,
@@ -471,12 +480,13 @@ const App: React.FC = () => {
           <AnimatedSection delay={0.1}>
             <Container id="about" sx={{ py: 12 }}>
               <TitleWithDivider>About Us</TitleWithDivider>
-              <Typography variant="h6">
-                At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
+                  <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.8, color: "text.secondary" }}>
+                      At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
                 websites and POS systems to data solutions and custom software, we craft technology
                 that helps businesses grow and thrive. Our team blends creativity with technical
                 expertise to deliver modern, reliable, and user-friendly products for clients worldwide.
-              </Typography>
+                    </Typography>
+           
               <Grid
                 container
                 spacing={6}
@@ -489,13 +499,14 @@ const App: React.FC = () => {
                 <Grid >
                   <Box sx={{ p: { xs: 0, md: 2 }, marginTop: "2rem" }}>
                     <Typography
-                      variant="h4"
+                      variant="h5"
                       sx={{
                         fontWeight: "bold",
                         mb: 2,
                         background: "linear-gradient(45deg, #00c6ff, #0072ff)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
+
                       }}
                     >
                       Why choose us?
