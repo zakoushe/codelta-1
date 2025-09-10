@@ -170,9 +170,6 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-
-
   useEffect(() => {
     if (project.images.length <= 1) return;
     const interval = setInterval(() => {
@@ -227,7 +224,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             src={img}
             alt={project.title}
             style={{
-              maxWidth: "80%",
+              maxWidth: "85%",
               maxHeight: "100%",
               objectFit: "contain",
               marginTop: "10px",
@@ -239,50 +236,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             }}
           />
         ))}
-
-        {project.images.length > 1 && (
-          <>
-
-
-            {/* Dots */}
-            {/* <Box
-              sx={{
-                position: "absolute",
-                bottom: "-10px",
-               
-                left: "50%",
-                transform: "translateX(-50%)",
-                display: "flex",
-                gap: 1,
-              }}
-            >
-              {project.images.map((_, idx) => (
-                <Box
-                  key={idx}
-                  onClick={() => setCurrentImageIndex(idx)}
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    bgcolor:
-                      idx === currentImageIndex
-                        ? "#00c6ff"
-                        : "rgba(255,255,255,0.6)",
-                    cursor: "pointer",
-                  }}
-                />
-              ))}
-            </Box> */}
-          </>
-        )}
       </Box>
-
       {/* Content */}
-      <Box sx={{ p: 3, backgroundColor: "background.paper", flexGrow: 1 }}>
+      <Box sx={{ p: 2, backgroundColor: "background.paper", flexGrow: 1 }}>
 
         <Typography
           variant="body2"
-          sx={{ color: "text.secondary", lineHeight: 1.6, textAlign: "left" }}
+          sx={{ color: "text.secondary", lineHeight: 1.6,  }}
         >
           {project.description}
         </Typography>
@@ -293,17 +253,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
 
 const App: React.FC = () => {
-
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
-
-
   useEffect(() => {
     const savedMode = localStorage.getItem('themeMode') as 'light' | 'dark' | null;
     if (savedMode) {
       setMode(savedMode);
     }
   }, []);
-
 
   useEffect(() => {
     localStorage.setItem('themeMode', mode);
@@ -394,8 +350,6 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ backgroundColor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
-
-
         <AppBar
           position="fixed"
           elevation={0}
@@ -527,7 +481,7 @@ const App: React.FC = () => {
                 }}
               >
                 {/* Text Side */}
-                <Grid item xs={12} md={6}>
+                <Grid >
                   <Box sx={{ p: { xs: 0, md: 2 }, marginTop: "2rem" }}>
                     <Typography
                       variant="h4"
@@ -718,7 +672,7 @@ const App: React.FC = () => {
                 <TitleWithDivider> Projects</TitleWithDivider>
                 <Grid container spacing={4} justifyContent="center">
                   {projects.map((project, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Grid  key={index}>
                       <ProjectCard project={project} />
                     </Grid>
                   ))}
@@ -753,7 +707,7 @@ const App: React.FC = () => {
                 >
                   <Paper
                     sx={{
-                      width: { xs: '100%', md: '60%' },
+                      width: { xs: '95%', md: '60%' },
                       p: 2,
                       borderRadius: 2,
                       boxShadow: '0 4px 12px hsla(224, 86%, 80%, 0.05)',
