@@ -1,11 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Box, Link, Container, Grid, Paper, Avatar, CssBaseline, ThemeProvider, createTheme, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Link, Container, Grid, Paper, Avatar, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { styled } from '@mui/material/styles';
 import logo from './assets/logo.jpeg';
@@ -20,10 +16,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import client3 from './assets/bob1.png';
 import client4 from './assets/rent1.png';
 import client41 from './assets/rent2.png';
-import client5 from './assets/gofast1.png';
-import client51 from './assets/gofast2.png';
-import client52 from './assets/gofast3.png';
-import client53 from './assets/gofast4.png';
+
 import { motion } from 'framer-motion'
 import StarIcon from '@mui/icons-material/Star';
 
@@ -178,12 +171,6 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const handleNext = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % project.images.length);
-  };
-  const handlePrevious = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
-  };
 
 
   useEffect(() => {
@@ -447,7 +434,7 @@ const App: React.FC = () => {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                {mode === 'dark' ? <WbSunnyIcon sx={{ color: '#FFD700' , marginTop:"7px"}} /> : <DarkModeIcon sx={{ color: '#1C1C1C', marginTop:"7px" }} />}
+                {mode === 'dark' ? <WbSunnyIcon sx={{ color: '#FFD700', marginTop: "7px" }} /> : <DarkModeIcon sx={{ color: '#1C1C1C', marginTop: "7px" }} />}
               </motion.div>
             </Box>
 
@@ -525,7 +512,7 @@ const App: React.FC = () => {
           <AnimatedSection delay={0.1}>
             <Container id="about" sx={{ py: 12 }}>
               <TitleWithDivider>About Us</TitleWithDivider>
-              <Typography variant="h">
+              <Typography variant="h6">
                 At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
                 websites and POS systems to data solutions and custom software, we craft technology
                 that helps businesses grow and thrive. Our team blends creativity with technical
@@ -789,50 +776,7 @@ const App: React.FC = () => {
               ))}
             </Box>
           </Container>
-          {/* Contact */}
-          {/* <Container id="contact" sx={{ py: 8 }}>
-            <Box textAlign="center">
-              <TitleWithDivider>Get In Touch</TitleWithDivider>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <EmailIcon sx={{ color: '#00c6ff' }} />
-                  <Typography variant="body1">
-                    <Link
-                      href="mailto:contact@co-delta.com"
-                      sx={{
-                        color: 'text.secondary',
-                        textDecoration: 'none',
-                        '&:hover': { color: '#00c6ff', textDecoration: 'underline' },
-                      }}
-                    >
-                      contact@co-delta.com
-                    </Link>
-                  </Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CallIcon sx={{ color: '#00c6ff' }} />
-                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>70 059 625</Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <WhatsAppIcon sx={{ color: '#00c6ff' }} />
-                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    <Link
-                      href="https://wa.me/96170059625"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff', textDecoration: 'underline' } }}
-                    >
-                      70 059 625
-                    </Link>
-                  </Typography>
-                </Box>
-
-              </Box>
-            </Box>
-          </Container> */}
         </main>
         <footer>
           <Box sx={{
@@ -915,10 +859,11 @@ const App: React.FC = () => {
             </Container>
           </Box>
         </footer>
-        {/* Footer */}
-        {/* <Box component="footer" sx={{ backgroundColor: 'background.paper', py: 3, textAlign: 'center', color: 'text.secondary' }}>
+        <Box component="footer" sx={{ backgroundColor: 'background.paper', py: 3, textAlign: 'center', color: 'text.secondary' }}>
           <Typography variant="body2">&copy; {new Date().getFullYear()} Codelta. All rights reserved.</Typography>
-        </Box> */}
+        </Box>
+        {/* Footer */}
+
       </Box>
     </ThemeProvider >
   );
