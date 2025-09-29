@@ -5,6 +5,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { styled } from '@mui/material/styles';
 import logo from './assets/logo.jpeg';
+import logo2 from './assets/logo2.png';
 import client1 from './assets/jabal1.png';
 import client11 from './assets/jabal2.png';
 import client2 from './assets/lebtar1.png';
@@ -48,9 +49,9 @@ const TitleWithDivider: React.FC<TitleWithDividerProps> = ({ children }) => {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           fontSize: {
-            xs: '1.5rem', 
-            sm: '2rem', 
-            md: '2rem',   
+            xs: '1.5rem',
+            sm: '2rem',
+            md: '2rem',
           },
         }}
       >
@@ -61,12 +62,12 @@ const TitleWithDivider: React.FC<TitleWithDividerProps> = ({ children }) => {
         sx={{
           height: '4px',
           width: {
-            xs: '40%', 
-            sm: '60%', 
-            md: '60%',  
+            xs: '40%',
+            sm: '60%',
+            md: '60%',
           },
           maxWidth: 200,
-          bgcolor: '#B0B0B0', 
+          bgcolor: '#B0B0B0',
           mx: 'auto',
           mt: 1,
           borderRadius: 2,
@@ -212,7 +213,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         component="h3"
         sx={{ fontWeight: "bold", marginTop: "15px", textAlign: "center" }}
       >
-        {project.title}
+        <a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {project.title}
+        </a>
       </Typography>
       {/* Image wrapper */}
       <Box
@@ -298,10 +306,27 @@ const App: React.FC = () => {
     //   description: "Transform the dining experience with a modern, contactless QR menu solution. Easily update your menu in real-time, provide detailed dish information, and streamline ordering for both staff and customers, enhancing convenience and operational efficiency."
     // },
     {
-      title: "QR Digital Menu & Ordering",
-      description:
-        "Revolutionize the dining experience with a contactless QR menu solution. Customers scan a QR code at their table to access the full menu, view detailed dish information, and place orders directly from their device. Easily update your menu in real-time and streamline operations for both staff and diners, enhancing convenience, speed, and customer satisfaction.",
+      title: "NFC",
+      description: (
+        <>
+          Revolutionize the dining experience with a contactless QR menu solution.
+          Customers can simply tap or scan to access the full menu at{" "}
+          <a
+            href="https://www.menu-codelta.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#0072ff", textDecoration: "none" }}
+          >
+            https://www.menu-codelta.com
+          </a>
+          , view detailed dish information, and place orders directly from their
+          device. Easily update your menu in real-time and streamline operations for
+          both staff and diners, enhancing convenience, speed, and customer
+          satisfaction.
+        </>
+      ),
     },
+
     {
       title: "SEO & Digital Marketing",
       description: "Boosting your online visibility through strategic SEO and digital marketing solutions. We optimize your website, improve search rankings, and drive targeted traffic to increase engagement, conversions, and brand authority."
@@ -368,16 +393,32 @@ const App: React.FC = () => {
           position="fixed"
           elevation={0}
           sx={{
-            backgroundColor: mode === 'dark' ? 'rgba(28,28,28,0.7)' : 'rgba(255,255,255,0.7)',
-            backdropFilter: 'blur(12px)',
-            boxShadow: 'none',
-            borderBottom: '1px solid rgba(255,255,255,0.05)'
+            backgroundColor:
+              mode === "dark"
+                ? "rgba(28,28,28,0.7)"
+                : "rgba(255,255,255,0.7)",
+            backdropFilter: "blur(12px)",
+            boxShadow: "none",
+            borderBottom: "1px solid rgba(255,255,255,0.05)",
           }}
         >
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', background: 'linear-gradient(45deg, #00c6ff, #0072ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Codelta
-            </Typography>
+
+            <Box
+              component="img"
+              src={logo2}
+              alt="Codelta logo"
+              sx={{
+                height: { xs: "50px", md: "70px" },
+                width: "auto",
+                mt: { xs: 2, md: 2 },
+                ml: { xs: 2, md: 2 },
+              }}
+            />
+
+
+
+            <Box sx={{ flexGrow: 1 }} />
 
             {/* Toggle Button */}
             <Box
@@ -385,14 +426,18 @@ const App: React.FC = () => {
               sx={{
                 width: 40,
                 height: 40,
-                borderRadius: '50%',
-                background: mode === 'dark' ? 'linear-gradient(135deg, #1C1C1C, #333)' : 'linear-gradient(135deg, #FFD700, #FFB800)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-                transition: 'all 0.3s ease',
+                borderRadius: "50%",
+                background:
+                  mode === "dark"
+                    ? "linear-gradient(135deg, #1C1C1C, #333)"
+                    : "linear-gradient(135deg, #FFD700, #FFB800)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                transition: "all 0.3s ease",
+                mr: 2, // adds some spacing before links
               }}
             >
               <motion.div
@@ -402,19 +447,35 @@ const App: React.FC = () => {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                {mode === 'dark' ? <WbSunnyIcon sx={{ color: '#FFD700', marginTop: "7px" }} /> : <DarkModeIcon sx={{ color: '#1C1C1C', marginTop: "7px" }} />}
+                {mode === "dark" ? (
+                  <WbSunnyIcon sx={{ color: "#FFD700", mt: "7px" }} />
+                ) : (
+                  <DarkModeIcon sx={{ color: "#1C1C1C", mt: "7px" }} />
+                )}
               </motion.div>
             </Box>
 
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, '& a': { ml: 3, color: 'text.secondary', textDecoration: 'none', '&:hover': { color: '#00c6ff' } } }}>
-              <Link href="#about"> About Us</Link>
+            {/* Links on the right */}
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                "& a": {
+                  ml: 3,
+                  color: "text.secondary",
+                  textDecoration: "none",
+                  "&:hover": { color: "#00c6ff" },
+                },
+              }}
+            >
+              <Link href="#about">About Us</Link>
               <Link href="#services">Services</Link>
               <Link href="#projects">Projects</Link>
               <Link href="#contact">Contact</Link>
             </Box>
           </Toolbar>
         </AppBar>
-        {/* Top Info Bar */}
+
+        
         <Box
           sx={{
             width: '100%',
@@ -427,7 +488,7 @@ const App: React.FC = () => {
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             borderBottom: '1px solid rgba(0, 198, 255, 0.3)',
-            mt: '64px', // leave space for AppBar if fixed
+            mt: '80px', 
             boxShadow: mode === 'dark' ? '0 2px 4px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.1)',
           }}
         >
@@ -480,13 +541,13 @@ const App: React.FC = () => {
           <AnimatedSection delay={0.1}>
             <Container id="about" sx={{ py: 12 }}>
               <TitleWithDivider>About Us</TitleWithDivider>
-                  <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.8, color: "text.secondary" }}>
-                      At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
+              <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.8, color: "text.secondary" }}>
+                At <strong>Codelta</strong>, we turn ideas into powerful digital solutions. From
                 websites and POS systems to data solutions and custom software, we craft technology
                 that helps businesses grow and thrive. Our team blends creativity with technical
                 expertise to deliver modern, reliable, and user-friendly products for clients worldwide.
-                    </Typography>
-           
+              </Typography>
+
               <Grid
                 container
                 spacing={6}
@@ -715,11 +776,11 @@ const App: React.FC = () => {
                     display: 'flex',
                     justifyContent: { xs: 'center', md: index % 2 === 0 ? 'flex-start' : 'flex-end' },
                   }}
-                  // component={motion.div}
-                  // initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  // whileInView={{ opacity: 1, x: 0 }}
-                  // transition={{ duration: 0.6, delay: index * 0.2 }}
-                  // viewport={{ once: true }}
+                // component={motion.div}
+                // initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                // whileInView={{ opacity: 1, x: 0 }}
+                // transition={{ duration: 0.6, delay: index * 0.2 }}
+                // viewport={{ once: true }}
                 >
                   <Paper
                     sx={{
